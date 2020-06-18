@@ -72,7 +72,7 @@ export function mine(index: i32, field: u32): bool {
     if((field & 0b11) == Cell.X) ++Xs;
     if((field & 0b11) == Cell.O) ++Os;
   }
-  if(Xs != Os && Xs != Os + 1) return false;
+  if(Xs != Os + 1) return false;
   
   balances.set(context.sender, balanceOf(context.sender) + 1);
   challenges.replace(index, challenges[index] | (1<<31))

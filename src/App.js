@@ -36,7 +36,6 @@ class App extends Component {
     if (window.location.search.includes("account_id")) {
       window.location.replace(window.location.origin + window.location.pathname)
     }
-    await this.welcome();
   }
 
   async requestSignIn() {

@@ -66,7 +66,7 @@ class App extends Component {
   async requestMine() {
     console.log("trying to mine")
     const mined = await mine(this.props.contract);
-    console.log("Mining success:", mined);
+    console.log(mined ? "Mining 1 DogeCoin V2" : "Mining unsuccessful!");
   }
 
   render() {

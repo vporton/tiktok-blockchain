@@ -14,20 +14,6 @@ function _row(x, y, z) {
     return x != Cell.S && x == y && x == z;
 }
 
-// export function won(field) {
-//     if(_row(getCell(field, 0, 0), getCell(field, 1, 1), getCell(field, 2, 2)) ||
-//        _row(getCell(field, 2, 0), getCell(field, 1, 1), getCell(field, 0, 2))
-//     )
-//         return true;
-//     for(let i = 0; i < 3; ++i) {
-//         if(_row(getCell(field, 0, i), getCell(field, 1, i), getCell(field, 2, i)) ||
-//            _row(getCell(field, i, 0), getCell(field, i, 1), getCell(field, i, 2))
-//         )
-//             return true;
-//     }
-//     return false;
-// }
-
 function _rowSuits(field, x0, y0, x1, y1, x2, y2) {
     const suits = (getCell(field, x0, y0) == X || getCell(field, x0, y0) == S) &&
                   (getCell(field, x1, y1) == X || getCell(field, x1, y1) == S) &&

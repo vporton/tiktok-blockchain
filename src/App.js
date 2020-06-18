@@ -4,7 +4,7 @@ import logo from './assets/logo.svg';
 import nearlogo from './assets/gray_near_logo.svg';
 import near from './assets/near.svg';
 import './App.css';
-import mine from './mining';
+import { mine } from './mining';
 
 class App extends Component {
   constructor(props) {

@@ -35,7 +35,7 @@ function random(max: u64): u64 {
   return rand() * max / (1<<31);
 }
 
-export function obtainChallenge() {
+export function createChallenge(): usize {
   let field: u32 = 0;
   seed = storage.getPrimitive<u64>("tictactoe_seed", 123456789);
   const moves = random(9);
@@ -55,11 +55,17 @@ export function obtainChallenge() {
   }
   storage.set<u64>("tictactoe_seed", seed);
   challenges.pushBack(field);
-  return (u128(challenges.length - 1) << 64) + u128(field);
+  return challenges.length - 1;
+}
+
+export function getChallenge(index: u64): u32 {
+  return challenges[index];
 }
 
 export function mine(index: u64, field: u32): bool {
-  if(!won(field)) return false;
+  const challenge = challenges[index];
+  if((challenge & ~field) != 0 || challenge & (1<<31) || !won(field))
+    return false;
   let Xs: u8 = 0;
   let Os: u8 = 0;
   for(let i: u8 = 0; i < 9; ++i) {
@@ -69,6 +75,7 @@ export function mine(index: u64, field: u32): bool {
   if(Xs != Os && Xs != Os + 1) return false;
   
   balances.set(context.sender, balanceOf(context.sender) + 1);
+  challenges.replace(index, challenges[index] | (1<<31))
 
   return true;
 }

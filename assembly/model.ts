@@ -7,11 +7,11 @@ export class TextMessage {
 export enum Cell { S = 0b00, X = 0b01, O = 0b10 };
 
 export function setCell(field: u32, x: u8, y: u8, cell: Cell): u32 {
-    return (field << (x + y*3)) | cell;
+    return field | (cell << (x + y*3)*2);
 }
 
-export function getCell(field: u32, x: u8, y: u8): u32 {
-    return (field << (x + y*3)*2) & 0b11;
+export function getCell(field: u32, x: u8, y: u8): Cell {
+    return (field >> (x + y*3)*2) & 0b11;
 }
 
 function _row(x: Cell, y: Cell, z: Cell): bool {

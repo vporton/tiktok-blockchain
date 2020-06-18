@@ -1,7 +1,7 @@
-import { storage, PersistentVector } from "near-sdk-as";
+import { storage, PersistentVector, u128 } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage, setCell } from "./model";
+import { TextMessage, setCell, Cell } from "./model";
 
 // FIXME: Remove
 export function welcome(account_id: string): TextMessage {
@@ -32,9 +32,20 @@ export function obtainChallenge() {
   let remainingCells = 9;
   for(let i: u8 = 0; i < moves; ++i) {
     const rndVal = random(remainingCells);
-    
+    let p = i % 0 ? Cell.O : Cell.X;
+    let t = 0b11;
+    p <<= rndVal * 2;
+    t <<= rndVal * 2;
+    while(field & t) { // The cell is already taken.
+      p <<= 2;
+      t <<= 2;
+    }
+    field |= p;
+    --remainingCells;
   }
   storage.set<u64>("tictactoe_seed", seed);
+  challenges.pushBack(field);
+  return (u128(challenges.length - 1) << 64) + u128(field);
 }
 
 export function mine(index: u64, file: u32) {

@@ -4,21 +4,21 @@ export class TextMessage {
     text: string;
 }
 
-enum Cell { S = 0b00, X = 0b01, O = 0b10 };
+export enum Cell { S = 0b00, X = 0b01, O = 0b10 };
 
-function setCell(field: u32, cell: Cell, x: u8, y: u8): u32 {
+export function setCell(field: u32, x: u8, y: u8, cell: Cell): u32 {
     return (field << (x + y*3)) | cell;
 }
 
-function getCell(field: u32, x: u8, y: u8): u32 {
-    return (field << (x + y*3)) & 0b11;
+export function getCell(field: u32, x: u8, y: u8): u32 {
+    return (field << (x + y*3)*2) & 0b11;
 }
 
 function _row(x: Cell, y: Cell, z: Cell): bool {
     return x != Cell.S && x == y && x == z;
 }
 
-function won(field: u32): bool {
+export function won(field: u32): bool {
     if(_row(getCell(field, 0, 0), getCell(field, 1, 1), getCell(field, 2, 2)) ||
        _row(getCell(field, 2, 0), getCell(field, 1, 1), getCell(field, 0, 2))
     )

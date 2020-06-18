@@ -20,7 +20,7 @@ function _row(x: Cell, y: Cell, z: Cell) {
 
 function won(field: u32): bool {
     if(_row(getCell(field, 0, 0), getCell(field, 1, 1), getCell(field, 2, 2)) ||
-       _row(getCell(field, 2, 0), getCell(field, 1, 1), getCell(field, 0, 2)
+       _row(getCell(field, 2, 0), getCell(field, 1, 1), getCell(field, 0, 2))
     )
         return true;
     for(let i: u8 = 0; i < 3; ++i) {

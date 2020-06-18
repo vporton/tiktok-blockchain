@@ -1,7 +1,7 @@
-import { storage, PersistentVector, u128 } from "near-sdk-as";
+import { storage, PersistentVector, PersistentMap, u128, context } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage, setCell, Cell } from "./model";
+import { TextMessage, setCell, Cell, won } from "./model";
 
 // FIXME: Remove
 export function welcome(account_id: string): TextMessage {
@@ -10,6 +10,16 @@ export function welcome(account_id: string): TextMessage {
 
 // FIXME: Remove
 export function setGreeting(message: string): void {
+}
+
+const balances = new PersistentMap<string, u64>("tictactoe_b:");
+
+export function balanceOf(tokenOwner: string): u64 {
+  if (!balances.contains(tokenOwner)) {
+    return 0;
+  }
+  const result = balances.getSome(tokenOwner);
+  return result;
 }
 
 // low bits are a TicTacToe field, highest bit is bool for mined.
@@ -48,6 +58,17 @@ export function obtainChallenge() {
   return (u128(challenges.length - 1) << 64) + u128(field);
 }
 
-export function mine(index: u64, file: u32) {
+export function mine(index: u64, field: u32): bool {
+  if(!won(field)) return false;
+  let Xs: u8 = 0;
+  let Os: u8 = 0;
+  for(let i: u8 = 0; i < 9; ++i) {
+    if((field & 0b11) == Cell.X) ++Xs;
+    if((field & 0b11) == Cell.O) ++Os;
+  }
+  if(Xs != Os && Xs != Os + 1) return false;
+  
+  balances.set(context.sender, balanceOf(context.sender) + 1);
 
+  return true;
 }

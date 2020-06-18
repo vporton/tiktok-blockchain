@@ -35,7 +35,7 @@ function random(max: u64): u64 {
   return rand() * max / (1<<31);
 }
 
-export function createChallenge(): usize {
+export function createChallenge(): i32 {
   let field: u32 = 0;
   seed = storage.getPrimitive<u64>("tictactoe_seed", 123456789);
   const moves = random(9);
@@ -44,8 +44,8 @@ export function createChallenge(): usize {
     const rndVal = random(remainingCells);
     let p = i % 0 ? Cell.O : Cell.X;
     let t = 0b11;
-    p <<= rndVal * 2;
-    t <<= rndVal * 2;
+    p <<= i32(rndVal) * 2;
+    t <<= i32(rndVal) * 2;
     while(field & t) { // The cell is already taken.
       p <<= 2;
       t <<= 2;
@@ -58,13 +58,13 @@ export function createChallenge(): usize {
   return challenges.length - 1;
 }
 
-export function getChallenge(index: u64): u32 {
+export function getChallenge(index: i32): u32 {
   return challenges[index];
 }
 
-export function mine(index: u64, field: u32): bool {
+export function mine(index: i32, field: u32): bool {
   const challenge = challenges[index];
-  if((challenge & ~field) != 0 || challenge & (1<<31) || !won(field))
+  if((challenge & ~field) != 0 || (challenge & (1<<31)) != 0 || !won(field))
     return false;
   let Xs: u8 = 0;
   let Os: u8 = 0;

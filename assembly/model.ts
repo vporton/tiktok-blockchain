@@ -14,7 +14,7 @@ function getCell(field: u32, x: u8, y: u8): u32 {
     return (field << (x + y*3)) & 0b11;
 }
 
-function _row(x: Cell, y: Cell, z: Cell) {
+function _row(x: Cell, y: Cell, z: Cell): bool {
     return x != Cell.S && x == y && x == z;
 }
 
